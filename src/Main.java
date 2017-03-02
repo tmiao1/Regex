@@ -1,30 +1,40 @@
+import java.io.StringWriter;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
+import org.apache.poi.hssf.record.NameRecord;
+
 import datacleaning.FileReader.ExcelReader;
 import datacleaning.FileReader.SqlReader;
 import datacleaning.FileReader.TxtReader;
+import datacleaning.Regex.AddressRegex;
+import datacleaning.Regex.BankCardNum;
+import datacleaning.Regex.CarNumRegex;
+import datacleaning.Regex.DateRegex;
 import datacleaning.Regex.EmailRegex;
+import datacleaning.Regex.FixedTelephone;
+import datacleaning.Regex.MoneyRegex;
+import datacleaning.Regex.NameRegex;
 import datacleaning.Regex.TelRegex;
 import datacleaning.attributecount.AttributeCount;
 
 public class Main {
 	
-	//public static String fileName = "/Users/miao/哈工大/项目/数据清洗/toDoFileList/爱慕网--160万/amimer1.txt";
-	public static String fileName = "D:\\数据清洗文件\\toDoFileList\\爱慕网--160万\\amimer1.txt";
+	public static String fileName = "/Users/miao/哈工大/项目/数据清洗/toDoFileList/爱慕网--160万/amimer1.txt";
+	//public static String fileName = "D:\\数据清洗文件\\toDoFileList\\爱慕网--160万\\amimer1.txt";
 
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		dataCleaning();
+		//dataCleaning();
 		/*****************测试正则表达式*****************/
-		//ArrayList<String> oneLineResult = Regex(string);
+		String string = "2011052599051-----曾芳-----0871-3302021-----15687106937-----盘龙区环城东路50号昆明理工大学(新迎校区)电力工程学院(明虹楼1108号)-----104.00-----";
+		ArrayList<String> oneLineResult = Regex(string);
 		
 		/*****************测试文件解析模块*****************/
 		//testExcelFileReader();
@@ -56,6 +66,7 @@ public class Main {
 		}
 		AttributeCount attributeCount = new AttributeCount();
 		attributeCount.countAttribute(regexResult, countResult);
+		System.out.println(countResult);
 		//printArrayListResult(regexResult.get(3), fileReadingResult.get(3));
 
 	}
@@ -114,7 +125,29 @@ public class Main {
 		EmailRegex emailRegex = new EmailRegex();
 		emailRegex.doRegex(initString, result);
 		
-		//printArrayListResult(result, initString);
+		AddressRegex addressRegex = new AddressRegex();
+		addressRegex.doRegex(initString, result);
+		
+		NameRegex nameRegex = new NameRegex();
+		nameRegex.doRegex(initString, result);
+		
+		FixedTelephone fixedTelephone = new FixedTelephone();
+		fixedTelephone.doRegex(initString, result);
+		
+		DateRegex dateRegex = new DateRegex();
+		dateRegex.doRegex(initString, result);
+		
+		BankCardNum bankCardNum = new BankCardNum();
+		bankCardNum.doRegex(initString, result);
+		
+		CarNumRegex carNumRegex = new CarNumRegex();
+		carNumRegex.doRegex(initString, result);
+		
+		MoneyRegex moneyRegex = new MoneyRegex();
+		moneyRegex.doRegex(initString, result);
+		
+		Collections.sort(result);
+		printArrayListResult(result, initString);
 		//printAllValue(result, string);
 		
 		return result;

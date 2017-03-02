@@ -1,8 +1,14 @@
 package datacleaning.Regex;
 
 public class AddressRegex extends InfoRegex{
-	private static String regex = "	((([\\u4e00-\\u9fa5]*\\u7701)?([\\u4e00-\\u7700]|\\s*|[\\u7702-\\u9fa5])*[\\w]?[\\u5e02|\\u53bf|\\u53f7|\\u533a|\\u680b]([\\u4e00-\\u9fa5]|\\d|\\s*)*([-]{0,2}\\d+)?)+)([\\u4e00-\\u9fa5]|\\w)*";	
-	private static String type = "Name";
+//	private static String regex = "([\\u4e00-\\u9fa5]*\\u5e02)|([\\u4e00-\\u9fa5]*\\u53bf)";
+//	private static String regex = "([([\\u4e00-\\u9fa5]*\\u5e02)|([\\u4e00-\\u9fa5]*\\u53bf)"
+//		+"|([\\u4e00-\\u9fa5]*\\u53f7)|([\\u4e00-\\u9fa5]*\\u533a)|([\\u4e00-\\u9fa5]*\\u680b)])+";//市县号区栋	
+	private static String regex = "(([\\u4e00-\\u9fa5]*\\u7701)?"//省
+			+"([\\u4e00-\\u9fa5]*\\u5e02|[\\u4e00-\\u9fa5]*\\u53bf"
+			+"|[\\u4e00-\\u9fa5]*\\u53f7|[\\u4e00-\\u9fa5]*\\u533a|[\\u4e00-\\u9fa5]*\\u680b|[\\u4e00-\\u9fa5]*\\u697c)+"//市县号区栋
+			+"([\\u4e00-\\u9fa5]|\\d|\\w|-\\d)*)";	
+	private static String type = "Address";
 	public AddressRegex() {
 		//父类的构造函数
 		super(type, regex);

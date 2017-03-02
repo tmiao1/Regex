@@ -3,7 +3,15 @@ package datacleaning.attributecount;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.sun.org.apache.xpath.internal.operations.And;
+
 public class AttributeCount {
+	/**
+	 * 正则表达式结果预处理
+	 */
+	public void regexResultPretreatment(){
+		
+	}
 	
 	/**
 	 * 
@@ -14,6 +22,7 @@ public class AttributeCount {
 	 */
 	public void countAttribute(ArrayList<ArrayList<String>> regexResult, ArrayList<HashMap<String, Integer>> countResult){
 		
+		int j = 0;
 		//遍历正则结果每一行
 		for (ArrayList<String> oneLine : regexResult) {
 			//遍历每个属性的匹配结果
@@ -30,6 +39,9 @@ public class AttributeCount {
 				}else {
 					HashMap<String, Integer> tempItem = countResult.get(i);
 					if (tempItem.containsKey(attribute)) {
+						if(attribute.equals("Telephone") && i == 0){
+							System.out.println(j);
+						}
 						Integer attributeCount = tempItem.get(attribute);
 						tempItem.put(attribute, attributeCount+1);
 					}else{
@@ -38,6 +50,14 @@ public class AttributeCount {
 					countResult.set(i, tempItem);
 				}
 			}
+			j = j+1;
 		}
+	}
+	/**
+	 * 通过统计的结果，分析出最终每一列的属性
+	 */
+	public void analyseAttribute(ArrayList<HashMap<String, Integer>> countResult){
+		ArrayList<String> attributeListResult = new ArrayList<String>();
+		
 	}
 }

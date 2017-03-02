@@ -1,7 +1,7 @@
 package datacleaning.Regex;
 
 public class DateRegex extends InfoRegex{
-	private static String regex = "([^0-9]((((1[6-9]|[2-9]\\d)\\d{2})"
+	private static String regex = "((?<!\\d)((((1[6-9]|[2-9]\\d)\\d{2})"
 			+ "(-|\\s|/|\\.|\\u5e74))?(1[02]|0?[13578])(-|\\s|/|\\.|\\u6708)"
 			+ "([12]\\d|3[01]|0?[1-9])(-|\\s|/|\\.|\\u65e5)?)|"
 			+ "((((1[6-9]|[2-9]\\d)\\d{2})(-|\\s|/|.|\\u5e74)?)"
