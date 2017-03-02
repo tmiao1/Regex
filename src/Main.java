@@ -23,18 +23,18 @@ import datacleaning.attributecount.AttributeCount;
 
 public class Main {
 	
-	public static String fileName = "/Users/miao/哈工大/项目/数据清洗/toDoFileList/爱慕网--160万/amimer1.txt";
-	//public static String fileName = "D:\\数据清洗文件\\toDoFileList\\爱慕网--160万\\amimer1.txt";
+	//public static String fileName = "/Users/miao/哈工大/项目/数据清洗/toDoFileList/爱慕网--160万/amimer1.txt";
+	public static String fileName = "D:\\数据清洗文件\\toDoFileList\\爱慕网--160万\\amimer1.txt";
 
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		//dataCleaning();
+		dataCleaning();
 		/*****************测试正则表达式*****************/
-		String string = "2011052599051-----曾芳-----0871-3302021-----15687106937-----盘龙区环城东路50号昆明理工大学(新迎校区)电力工程学院(明虹楼1108号)-----104.00-----";
-		ArrayList<String> oneLineResult = Regex(string);
+//		String string = "2008080820695-----徐林华:13701319709----------北京市朝阳区光华路7号汉威大厦西区22层:82.00-----";
+//		ArrayList<String> oneLineResult = Regex(string);
 		
 		/*****************测试文件解析模块*****************/
 		//testExcelFileReader();
@@ -61,7 +61,6 @@ public class Main {
 		for (Iterator<String> iterator = fileReadingResult.iterator(); iterator.hasNext();) {
 			String string = (String) iterator.next();
 			ArrayList<String> oneLineResult = Regex(string);
-			Collections.sort(oneLineResult);
 			regexResult.add(oneLineResult);   //将每一行的结果添加到总结果中，总结果为二维数组
 		}
 		AttributeCount attributeCount = new AttributeCount();
@@ -146,8 +145,10 @@ public class Main {
 		MoneyRegex moneyRegex = new MoneyRegex();
 		moneyRegex.doRegex(initString, result);
 		
-		Collections.sort(result);
-		printArrayListResult(result, initString);
+		result = AttributeCount.regexResultPretreatment(result);
+		
+		//Collections.sort(result);
+		//printArrayListResult(result, initString);
 		//printAllValue(result, string);
 		
 		return result;

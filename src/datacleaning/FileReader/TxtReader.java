@@ -1,5 +1,6 @@
 package datacleaning.FileReader;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -14,12 +15,15 @@ public class TxtReader {
 		//存储结果，Arraylist
 		ArrayList<String> result = new ArrayList<String>();
 		int count = 0;
+		String encoding = "";
 		File file = new File(fileName);
 		InputStreamReader reader;
+		
 		try {
 			// 建立一个输入流对象reader 
 			reader = new InputStreamReader(  
-			        new FileInputStream(file));
+			        new FileInputStream(file),"UTF-8");
+			
 			// 建立一个对象，它把文件内容转成计算机能读懂的语言
 	        BufferedReader br = new BufferedReader(reader);   
 	        
