@@ -24,9 +24,16 @@ public class UnknownRegex {
 		matcher = pattern.matcher(initString);
 		String itemResult = "";               //存储匹配出的一条结果
 		
+		int i = 0;
 		while(matcher.find()){
+			if (i > 0) {
+				itemResult = matcher.start() + ";" + matcher.end() + ";" + type + i;
+				result.add(itemResult);
+			}else {
 				itemResult = matcher.start() + ";" + matcher.end() + ";" + type;
 				result.add(itemResult);
+			}
+			i = i+1;
 		}
 		
 		return result;

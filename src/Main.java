@@ -30,10 +30,10 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-//		dataCleaning();
+		dataCleaning();
 		/*****************测试正则表达式*****************/
-		String string = "2011052596240-----孙懿----------15811555621-----建外大街22号赛特广场11层:117.00-----";
-		ArrayList<String> oneLineResult = Regex(string);
+//		String string = "2011052596240-----孙懿----------15811555621-----建外大街22号赛特广场11层:117.00-----";
+//		ArrayList<String> oneLineResult = Regex(string);
 		
 		/*****************测试文件解析模块*****************/
 		//testExcelFileReader();
@@ -55,6 +55,10 @@ public class Main {
 		
 		HashMap<String, Integer> totalCountResultHashMap = new HashMap<String, Integer>();
 		
+		ArrayList<Map.Entry<ArrayList<String>, Integer>> resultByLine = new ArrayList<Map.Entry<ArrayList<String>,Integer>>();
+		
+		ArrayList<String> targetAttributeResult = new ArrayList<String>();
+		
 		if (fileName.endsWith(".txt")) {
 			TxtReader txtReader = new TxtReader();
 			 fileReadingResult = txtReader.readTxtFile(fileName);
@@ -64,18 +68,20 @@ public class Main {
 			ArrayList<String> oneLineResult = Regex(string);
 			regexResult.add(oneLineResult);   //将每一行的结果添加到总结果中，总结果为二维数组
 		}
-
+		
+		//计算每一列存在的属性及数量
 		AttributeCount.countAttribute(regexResult, countResult);
-		totalCountResultHashMap = AttributeCount.analyseAttribute(countResult);
-		List<Map.Entry<ArrayList<String>, Integer>> resultByLine = AttributeCount.countRegexResultByLine(regexResult);
+		//计算每个属性总共的数量
+		totalCountResultHashMap = AttributeCount.countTotalAttribute(countResult);
+		//根据行计算由相同属性的构成的行的数量
+		resultByLine = AttributeCount.countRegexResultByLine(regexResult);
+		//合并按行统计的结果，以一定阈值筛选行属性的形式，最终将筛选出的行属性取并集得到属性集
+		targetAttributeResult = AttributeCount.analyseAttributeByLine(resultByLine, regexResult.size());
 		System.out.println(totalCountResultHashMap);
 		System.out.println(countResult);
 		System.out.println(resultByLine);
-		Integer totalInteger = 0;
-		for (Entry<ArrayList<String>, Integer> entry : resultByLine) {
-			totalInteger = totalInteger + entry.getValue();
-		}
-		System.out.println(totalInteger);
+		System.out.println(targetAttributeResult);
+		
 		//printArrayListResult(regexResult.get(3), fileReadingResult.get(3));
 	}
 	
@@ -161,7 +167,7 @@ public class Main {
 		
 		result = AttributeCount.regexResultPretreatment(result);
 		
-		printArrayListResult(result, initString);
+		//printArrayListResult(result, initString);
 		
 		return result;
 	}
