@@ -19,6 +19,7 @@ import datacleaning.Regex.NameRegex;
 import datacleaning.Regex.TelRegex;
 import datacleaning.Regex.UnknownRegex;
 import datacleaning.attributecount.AttributeCount;
+import datacleaning.attributecount.ResultOperation;
 
 public class Main {
 	
@@ -77,10 +78,13 @@ public class Main {
 		resultByLine = AttributeCount.countRegexResultByLine(regexResult);
 		//合并按行统计的结果，以一定阈值筛选行属性的形式，最终将筛选出的行属性取并集得到属性集
 		targetAttributeResult = AttributeCount.analyseAttributeByLine(resultByLine, regexResult.size());
+		
 		System.out.println(totalCountResultHashMap);
 		System.out.println(countResult);
 		System.out.println(resultByLine);
 		System.out.println(targetAttributeResult);
+		
+		ResultOperation.outputReusltToConsole(fileReadingResult, regexResult, targetAttributeResult);
 		
 		//printArrayListResult(regexResult.get(3), fileReadingResult.get(3));
 	}

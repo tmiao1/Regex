@@ -38,7 +38,7 @@ public class InfoRegex {
 		int i = 0;
 		while(matcher.find()){
 			if (i > 0) {
-				itemResult = matcher.start() + ";" + matcher.end() + ";" + type + i;
+				itemResult = matcher.start() + ";" + matcher.end() + ";" + type + "-" + i;
 				result.add(itemResult);
 			}else {
 				itemResult = matcher.start() + ";" + matcher.end() + ";" + type;
