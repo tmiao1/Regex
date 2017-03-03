@@ -1,9 +1,15 @@
 package datacleaning.attributecount;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
-import com.sun.org.apache.xpath.internal.operations.And;
+import sun.tools.jar.resources.jar;
 
 public class AttributeCount {
 	/**
@@ -55,7 +61,7 @@ public class AttributeCount {
 	 * @param countResult
 	 *        存储统计结果，每个hashmap表示该列的属性组成情况
 	 */
-	public void countAttribute(ArrayList<ArrayList<String>> regexResult, ArrayList<HashMap<String, Integer>> countResult){
+	public static void countAttribute(ArrayList<ArrayList<String>> regexResult, ArrayList<HashMap<String, Integer>> countResult){
 		
 		int j = 1;
 		//遍历正则结果每一行
@@ -91,8 +97,63 @@ public class AttributeCount {
 	/**
 	 * 通过统计的结果，分析出最终每一列的属性
 	 */
-	public void analyseAttribute(ArrayList<HashMap<String, Integer>> countResult){
-		ArrayList<String> attributeListResult = new ArrayList<String>();
-		
+	public static HashMap<String, Integer> analyseAttribute(ArrayList<HashMap<String, Integer>> countResult){
+		HashMap<String, Integer> attributeListResult = new HashMap<String,Integer>();
+		for (HashMap<String, Integer> hashMap : countResult) {
+			Iterator<Entry<String, Integer>> iterator = hashMap.entrySet().iterator();
+			while(iterator.hasNext()){
+				Entry<String, Integer> entry = iterator.next();
+				String attribute = entry.getKey();
+				Integer count = entry.getValue();
+				if (attributeListResult.get(attribute) != null) {
+					count = count + attributeListResult.get(attribute);
+					attributeListResult.put(attribute, count);
+				}else {
+					attributeListResult.put(attribute, count);
+				}
+			}
+		}
+		return attributeListResult;
+	}
+	
+	public static List<Map.Entry<ArrayList<String>, Integer>> countRegexResultByLine(ArrayList<ArrayList<String>> regexResult){
+		HashMap<ArrayList<String>, Integer> resultHashMap = new HashMap<ArrayList<String>, Integer>();
+		int j = 1;
+		for (ArrayList<String> regexResultInOneLine : regexResult) {
+			ArrayList<String> allAttributeInOneLine = new ArrayList<String>();
+			for(String attributeString : regexResultInOneLine){
+				String attribute = attributeString.split(";")[2];
+				allAttributeInOneLine.add(attribute);
+			}
+			Collections.sort(allAttributeInOneLine);
+			ArrayList<String> tempArrayList = new ArrayList<String>();
+			tempArrayList.add("Address");
+			tempArrayList.add("Money");
+			tempArrayList.add("Name");
+			tempArrayList.add("Telephone");
+			tempArrayList.add("Unknown");
+			tempArrayList.add("Unknown");
+			Collections.sort(tempArrayList);
+			if (allAttributeInOneLine.equals(tempArrayList)) {
+				System.out.println(j);
+			}
+			if (resultHashMap.containsKey(allAttributeInOneLine)) {
+				int count = resultHashMap.get(allAttributeInOneLine);
+				resultHashMap.put(allAttributeInOneLine, count+1);
+			}else{
+				resultHashMap.put(allAttributeInOneLine, 1);
+			}
+			j = j+1;
+		}
+		List<Map.Entry<ArrayList<String>, Integer>> list = new ArrayList<Map.Entry<ArrayList<String>, Integer>>(resultHashMap.entrySet());
+		Collections.sort(list, new Comparator<Map.Entry<ArrayList<String>, Integer>>() {  
+            //降序排序  
+            @Override  
+            public int compare(Entry<ArrayList<String>, Integer> o1, Entry<ArrayList<String>, Integer> o2) {  
+                //return o1.getValue().compareTo(o2.getValue());  
+                return o2.getValue().compareTo(o1.getValue());  
+            }  
+        }); 
+		return list;
 	}
 }

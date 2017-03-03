@@ -1,11 +1,9 @@
-import java.io.StringWriter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
-
-import org.apache.poi.hssf.record.NameRecord;
 
 import datacleaning.FileReader.ExcelReader;
 import datacleaning.FileReader.SqlReader;
@@ -19,22 +17,23 @@ import datacleaning.Regex.FixedTelephone;
 import datacleaning.Regex.MoneyRegex;
 import datacleaning.Regex.NameRegex;
 import datacleaning.Regex.TelRegex;
+import datacleaning.Regex.UnknownRegex;
 import datacleaning.attributecount.AttributeCount;
 
 public class Main {
 	
-	//public static String fileName = "/Users/miao/哈工大/项目/数据清洗/toDoFileList/爱慕网--160万/amimer1.txt";
-	public static String fileName = "D:\\数据清洗文件\\toDoFileList\\爱慕网--160万\\amimer1.txt";
+	public static String fileName = "/Users/miao/哈工大/项目/数据清洗/toDoFileList/爱慕网--160万/amimer1.txt";
+	//public static String fileName = "D:\\数据清洗文件\\toDoFileList\\爱慕网--160万\\amimer1.txt";
 
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		dataCleaning();
+//		dataCleaning();
 		/*****************测试正则表达式*****************/
-//		String string = "2008080820695-----徐林华:13701319709----------北京市朝阳区光华路7号汉威大厦西区22层:82.00-----";
-//		ArrayList<String> oneLineResult = Regex(string);
+		String string = "2011052596240-----孙懿----------15811555621-----建外大街22号赛特广场11层:117.00-----";
+		ArrayList<String> oneLineResult = Regex(string);
 		
 		/*****************测试文件解析模块*****************/
 		//testExcelFileReader();
@@ -54,6 +53,8 @@ public class Main {
 		
 		ArrayList<HashMap<String, Integer>> countResult = new ArrayList<HashMap<String,Integer>>();
 		
+		HashMap<String, Integer> totalCountResultHashMap = new HashMap<String, Integer>();
+		
 		if (fileName.endsWith(".txt")) {
 			TxtReader txtReader = new TxtReader();
 			 fileReadingResult = txtReader.readTxtFile(fileName);
@@ -63,11 +64,19 @@ public class Main {
 			ArrayList<String> oneLineResult = Regex(string);
 			regexResult.add(oneLineResult);   //将每一行的结果添加到总结果中，总结果为二维数组
 		}
-		AttributeCount attributeCount = new AttributeCount();
-		attributeCount.countAttribute(regexResult, countResult);
-		System.out.println(countResult);
-		//printArrayListResult(regexResult.get(3), fileReadingResult.get(3));
 
+		AttributeCount.countAttribute(regexResult, countResult);
+		totalCountResultHashMap = AttributeCount.analyseAttribute(countResult);
+		List<Map.Entry<ArrayList<String>, Integer>> resultByLine = AttributeCount.countRegexResultByLine(regexResult);
+		System.out.println(totalCountResultHashMap);
+		System.out.println(countResult);
+		System.out.println(resultByLine);
+		Integer totalInteger = 0;
+		for (Entry<ArrayList<String>, Integer> entry : resultByLine) {
+			totalInteger = totalInteger + entry.getValue();
+		}
+		System.out.println(totalInteger);
+		//printArrayListResult(regexResult.get(3), fileReadingResult.get(3));
 	}
 	
 	public static void testReadTxtFile(){
@@ -147,9 +156,12 @@ public class Main {
 		
 		result = AttributeCount.regexResultPretreatment(result);
 		
-		//Collections.sort(result);
-		//printArrayListResult(result, initString);
-		//printAllValue(result, string);
+		UnknownRegex unknownRegex = new UnknownRegex();
+		unknownRegex.doRegex(initString, result);
+		
+		result = AttributeCount.regexResultPretreatment(result);
+		
+		printArrayListResult(result, initString);
 		
 		return result;
 	}
