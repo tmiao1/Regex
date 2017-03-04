@@ -22,7 +22,9 @@ import datacleaning.attributecount.ResultOperation;
 
 public class Main {
 	
-	public static String fileName = "/Users/miao/哈工大/项目/数据清洗/toDoFileList/爱慕网--160万/amimer1.txt";
+	//public static String fileName = "/Users/miao/哈工大/项目/数据清洗/toDoFileList/爱慕网--160万/amimer1.txt";
+	public static String fileName = "/Users/miao/哈工大/项目/数据清洗/toDoFileList/users2.txt";
+
 	//public static String fileName = "D:\\数据清洗文件\\toDoFileList\\爱慕网--160万\\amimer1.txt";
 	
 	public static String targetFileName = "/Users/miao/哈工大/result.txt";

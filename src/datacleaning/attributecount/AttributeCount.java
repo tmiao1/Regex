@@ -81,9 +81,6 @@ public class AttributeCount {
 				}else {
 					HashMap<String, Integer> tempItem = countResult.get(i);
 					if (tempItem.containsKey(attribute)) {
-						if(attribute.equals("Money") && i == 0){
-							System.out.println(j);
-						}
 						Integer attributeCount = tempItem.get(attribute);
 						tempItem.put(attribute, attributeCount+1);
 					}else{

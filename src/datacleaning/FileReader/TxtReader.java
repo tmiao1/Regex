@@ -17,6 +17,9 @@ public class TxtReader {
 		int count = 0;
 		String encoding = "";
 		File file = new File(fileName);
+		if(!file.exists()){
+			return result;
+		}
 		InputStreamReader reader;
 		
 		try {

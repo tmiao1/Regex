@@ -1,0 +1,15 @@
+Length 属性长度
+NumCount 数字个数
+ChineseCount 中文个数
+ContainsLocationCount 包含地名个数
+ContainsFirstNameCount 包含姓氏的个数
+FirstTwoNum 开头的前两位数字
+FirstThreeNum 开头的前三位数字
+ContainsSpecialWordCount 包含特殊字的个数
+ContainsSpecialmarkCount 包含分隔符的个数
+ContainsAt 是否包含@
+CountainsDate 是否包含日期
+OnlyNum 是否是纯数字
+OnlyEnglish 只是英文字符
+OnlyChinese 只是汉字
+NumValue 实际值 
