@@ -1,20 +1,33 @@
 package datacleaning.attributecount;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
-
-import org.apache.poi.ss.formula.functions.Now;
 
 public class ResultOperation {
 	public void combineSameAttribute(){
 		
 	}
-	public void rePositionUnknown(){
-		
-	}
-	public static void outputReusltToConsole(ArrayList<String> fileReadingResult,
+	/**
+	 * 输出清洗结果至控制台或文件
+	 * @param fileReadingResult
+	 * @param regexResult
+	 * @param targetAttributeResult
+	 * @param fileName
+	 * 			如果有文件名则输出到文件，为空则至控制台
+	 * @return
+	 */
+	public static ArrayList<ArrayList<String>> outputReusltToConsole(ArrayList<String> fileReadingResult,
 			ArrayList<ArrayList<String>> regexResult,
-			ArrayList<String> targetAttributeResult){
-		
+			ArrayList<String> targetAttributeResult,
+			String fileName){
+		ArrayList<ArrayList<String>> result = new ArrayList<ArrayList<String>>();
+		//错误、缺失属性数量
+		int wrongCount = 0;
+		int missingCount = 0;	
+		writeToTxt(arraylistToString(targetAttributeResult, "    "), fileName);
 		//遍历原始文件及正则结果的每一行
 		for (int i = 0; i < fileReadingResult.size(); i++) {
 			//原始文件的一行
@@ -52,6 +65,7 @@ public class ResultOperation {
 			//最终结果 包含属性和位置
 			ArrayList<String> outputResultArrayList = new ArrayList<String>();
 			Boolean maybeWrongBoolean = false;
+			Boolean missingAttributeBoolean = false;
 			//遍历结果集
 			for (int z = 0; z < attributeResultWithFlag.size(); z++) {
 				String string = attributeResultWithFlag.get(z);
@@ -74,6 +88,7 @@ public class ResultOperation {
 						}
 						else {
 							outputResultArrayList.add("-1;-1;" + string.split(";")[1]);
+							missingAttributeBoolean = true;
 						}
 					}
 					//通过结果前面的属性 在正则集中找到该属性 那么判断该属性后面的属性 即与当前属性对其的属性是不是也为none 为none有误 不为缺失
@@ -82,6 +97,7 @@ public class ResultOperation {
 						//前一个属性是最后一个 缺失
 						if (now == regexWithFlag.size()) {
 							outputResultArrayList.add("-1;-1;" + string.split(";")[1]);
+							missingAttributeBoolean = true;
 							continue;
 						}
 						String nowStringOnRegex = regexWithFlag.get(now);
@@ -96,9 +112,11 @@ public class ResultOperation {
 						}
 						else {//缺失
 							outputResultArrayList.add("-1;-1;" + string.split(";")[1]);
+							missingAttributeBoolean = true;
 						}
-					}else{
+					}else{//缺失
 						outputResultArrayList.add("-1;-1;" + string.split(";")[1]);
+						missingAttributeBoolean = true;
 					}
 				}else{
 					String start = string.split(";")[0];
@@ -107,11 +125,86 @@ public class ResultOperation {
 					outputResultArrayList.add(start + ";" + end + ";" + attr);
 				}
 			}
+			//构造最终字符串
+			String stringToWrite = turnRegexResultToString(outputResultArrayList, fileReadingResult.get(i));
+			//如果有文件名则写入文件
+			if (fileName.length() != 0) {
+				writeToTxt(stringToWrite, fileName);
+			}else {
+				System.out.println(stringToWrite);
+			}
+			//统计错误以及缺失属性的条目数量
 			if (maybeWrongBoolean) {
-				System.out.println(fileReadingResult.get(i));
-				System.out.println(outputResultArrayList);
+				wrongCount++;
+//				System.out.println(fileReadingResult.get(i));
+//				System.out.println(outputResultArrayList);
+			}
+			if (missingAttributeBoolean) {
+				missingCount++;
 			}
 			
+			//System.out.println(stringToWrite);
+			result.add(outputResultArrayList);
 		}
+		System.out.println("total: " + fileReadingResult.size());
+		System.out.println("maybe wrong: " + wrongCount);
+		System.out.println("missing: " + missingCount);
+		return result;
+	}
+	
+	public static void writeToTxt(String line, String fileName){
+		FileWriter fw = null;
+		try {
+			// 如果文件存在，则追加内容；如果文件不存在，则创建文件
+			File f = new File(fileName);
+			fw = new FileWriter(f, true);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		PrintWriter pw = new PrintWriter(fw);
+		pw.println(line);
+		pw.flush();
+		try {
+			fw.flush();
+			pw.close();
+			fw.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static String turnRegexResultToString(ArrayList<String> outputResultArrayList, String initString){
+		String result = "";
+		for (String attribute : outputResultArrayList) {
+			String[] itemStrings = attribute.split(";");
+			int start = Integer.parseInt(itemStrings[0]);
+			int end = Integer.parseInt(itemStrings[1]);
+			if (result.length() == 0) {
+				if (start == -1) {
+					result = "null";
+				}else{
+					result = initString.substring(start, end);
+				}
+			}else{
+				if (start == -1) {
+					result = result + " null";
+				}else{
+					result = result + " " + initString.substring(start, end); 
+				}
+			}
+		}
+		return result;
+	}
+	
+	public static String arraylistToString(ArrayList<String> arrayList, String separator) {
+		String resultString = "";
+		for (String string : arrayList) {
+			if (resultString.length() == 0) {
+				resultString = string;
+			}else {
+				resultString = resultString + separator + string;
+			}
+		}
+		return resultString;
 	}
 }

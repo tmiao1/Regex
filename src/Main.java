@@ -1,7 +1,6 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -25,6 +24,9 @@ public class Main {
 	
 	public static String fileName = "/Users/miao/哈工大/项目/数据清洗/toDoFileList/爱慕网--160万/amimer1.txt";
 	//public static String fileName = "D:\\数据清洗文件\\toDoFileList\\爱慕网--160万\\amimer1.txt";
+	
+	public static String targetFileName = "/Users/miao/哈工大/result.txt";
+	//public static String targetFileName = "D:\\result.txt";
 
 	/**
 	 * @param args
@@ -60,6 +62,8 @@ public class Main {
 		
 		ArrayList<String> targetAttributeResult = new ArrayList<String>();
 		
+		ArrayList<ArrayList<String>> finalResult = new ArrayList<ArrayList<String>>();
+		
 		if (fileName.endsWith(".txt")) {
 			TxtReader txtReader = new TxtReader();
 			 fileReadingResult = txtReader.readTxtFile(fileName);
@@ -79,12 +83,12 @@ public class Main {
 		//合并按行统计的结果，以一定阈值筛选行属性的形式，最终将筛选出的行属性取并集得到属性集
 		targetAttributeResult = AttributeCount.analyseAttributeByLine(resultByLine, regexResult.size());
 		
-		System.out.println(totalCountResultHashMap);
-		System.out.println(countResult);
-		System.out.println(resultByLine);
-		System.out.println(targetAttributeResult);
+//		System.out.println(totalCountResultHashMap);
+//		System.out.println(countResult);
+//		System.out.println(resultByLine);
+//		System.out.println(targetAttributeResult);
 		
-		ResultOperation.outputReusltToConsole(fileReadingResult, regexResult, targetAttributeResult);
+		finalResult = ResultOperation.outputReusltToConsole(fileReadingResult, regexResult, targetAttributeResult, targetFileName);
 		
 		//printArrayListResult(regexResult.get(3), fileReadingResult.get(3));
 	}
