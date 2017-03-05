@@ -56,7 +56,7 @@ public class AttributeCount {
 		
 	}
 	/**
-	 * 
+	 * 得出每一列都有哪些属性以及个数
 	 * @param regexResult
 	 *        
 	 * @param countResult
@@ -70,6 +70,10 @@ public class AttributeCount {
 			//遍历每个属性的匹配结果
 			for (int i = 0; i < oneLine.size(); i++) {
 				String attribute = oneLine.get(i).split(";")[2];
+//				if (attribute.equals("Date")) {
+//					System.out.println(j);
+//					System.out.println(oneLine);
+//				}
 				if(countResult.size() == 0){
 					HashMap<String, Integer> firstItem = new HashMap<String, Integer>();
 					firstItem.put(attribute, 1);
