@@ -99,6 +99,20 @@ public class Main {
 		
 		finalResult = ResultOperation.outputReusltToConsole(fileReadingResult, regexResult, targetAttributeResult, targetFileName);
 		
+		
+		for (int i = 0; i < finalResult.size(); i++) {
+			ArrayList<String> oneLineInFinalResult = finalResult.get(i);
+			String onlineInFile = fileReadingResult.get(i);
+			
+			for (String string : oneLineInFinalResult) {
+				int start = Integer.parseInt(string.split(";")[0]);
+				int end = Integer.parseInt(string.split(";")[1]);
+				String attributeString = string.split(";")[2];
+				
+				
+			}
+		}
+		
 		//printArrayListResult(regexResult.get(3), fileReadingResult.get(3));
 	}
 	
