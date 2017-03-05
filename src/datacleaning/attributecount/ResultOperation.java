@@ -26,8 +26,12 @@ public class ResultOperation {
 		ArrayList<ArrayList<String>> result = new ArrayList<ArrayList<String>>();
 		//错误、缺失属性数量
 		int wrongCount = 0;
-		int missingCount = 0;	
-		writeToTxt(arraylistToString(targetAttributeResult, "    "), fileName);
+		int missingCount = 0;
+		if (fileName.length() != 0) {
+			writeToTxt(arraylistToString(targetAttributeResult, "    "), fileName);
+		}else{
+			
+		}
 		//遍历原始文件及正则结果的每一行
 		for (int i = 0; i < fileReadingResult.size(); i++) {
 			//原始文件的一行
@@ -131,7 +135,7 @@ public class ResultOperation {
 			if (fileName.length() != 0) {
 				writeToTxt(stringToWrite, fileName);
 			}else {
-				System.out.println(stringToWrite);
+				//System.out.println(stringToWrite);
 			}
 			//统计错误以及缺失属性的条目数量
 			if (maybeWrongBoolean) {

@@ -1,16 +1,12 @@
 package datacleaning.attributecount;
 
-import java.io.DataOutput;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import sun.tools.jar.resources.jar;
 
 public class AttributeCount {
 	/**

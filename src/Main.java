@@ -19,24 +19,27 @@ import datacleaning.Regex.TelRegex;
 import datacleaning.Regex.UnknownRegex;
 import datacleaning.attributecount.AttributeCount;
 import datacleaning.attributecount.ResultOperation;
-import datacleaning.machineLearning.FeatureExtraction;
+import datacleaning.machineLearning.PrepareWekeFileArff;
 
 public class Main {
-	
+	/*******************清洗前的文件******************/
 	public static String fileName = "/Users/miao/哈工大/项目/数据清洗/toDoFileList/爱慕网--160万/amimer1.txt";
 	//public static String fileName = "/Users/miao/哈工大/项目/数据清洗/toDoFileList/users2.txt";
 
 	//public static String fileName = "D:\\数据清洗文件\\toDoFileList\\爱慕网--160万\\amimer1.txt";
 	
+	/*******************清洗后的目标文件******************/
 	public static String targetFileName = "/Users/miao/哈工大/result.txt";
 	//public static String targetFileName = "D:\\result.txt";
-
+	
+	/*******************目标arff文件******************/
+	public static String arffFileName = "/Users/miao/哈工大/result.arff";
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-//		dataCleaning();
+		dataCleaning();
 		/*****************测试正则表达式*****************/
 //		String string = "2011052596240-----孙懿----------15811555621-----建外大街22号赛特广场11层:117.00-----";
 //		ArrayList<String> oneLineResult = Regex(string);
@@ -46,11 +49,11 @@ public class Main {
 		//testSqlReader();
 		//testReadTxtFile();
 		/*****************测试机器学习模块*****************/
-		String attribute = "于溪淼";
-		FeatureExtraction featureExtraction = new FeatureExtraction();
-		ArrayList<String> result = featureExtraction.getFeatureSet(attribute);
-		String resultToCsvLine = ResultOperation.arraylistToString(result, ",");
-		System.out.println(resultToCsvLine);
+//		String attribute = "于溪淼";
+//		FeatureExtraction featureExtraction = new FeatureExtraction();
+//		ArrayList<String> result = featureExtraction.getFeatureSet(attribute);
+//		String resultToCsvLine = ResultOperation.arraylistToString(result, ",");
+//		System.out.println(resultToCsvLine);
 	}
 	
 	public static void dataCleaning(){
@@ -97,22 +100,10 @@ public class Main {
 //		System.out.println(resultByLine);
 //		System.out.println(targetAttributeResult);
 		
-		finalResult = ResultOperation.outputReusltToConsole(fileReadingResult, regexResult, targetAttributeResult, targetFileName);
-		
-		
-		for (int i = 0; i < finalResult.size(); i++) {
-			ArrayList<String> oneLineInFinalResult = finalResult.get(i);
-			String onlineInFile = fileReadingResult.get(i);
-			
-			for (String string : oneLineInFinalResult) {
-				int start = Integer.parseInt(string.split(";")[0]);
-				int end = Integer.parseInt(string.split(";")[1]);
-				String attributeString = string.split(";")[2];
-				
-				
-			}
-		}
-		
+//		finalResult = ResultOperation.outputReusltToConsole(fileReadingResult, regexResult, targetAttributeResult, targetFileName);
+		finalResult = ResultOperation.outputReusltToConsole(fileReadingResult, regexResult, targetAttributeResult, "");
+
+		PrepareWekeFileArff.writeArff(finalResult, fileReadingResult, arffFileName);
 		//printArrayListResult(regexResult.get(3), fileReadingResult.get(3));
 	}
 	

@@ -21,8 +21,8 @@ public class FeatureExtraction {
 		int containsLocationCount = getContainsLocationCount(attribute);
 		result.add(containsLocationCount + "");
 		
-		int containsFirstName = getContainsFirstNameCount(attribute);
-		result.add(containsFirstName + "");
+		int containsFirstNameCount = getContainsFirstNameCount(attribute);
+		result.add(containsFirstNameCount + "");
 		
 		int firstTwoNum = getFirstTwoNum(attribute);
 		result.add(firstTwoNum + "");
@@ -50,6 +50,9 @@ public class FeatureExtraction {
 		
 		int onlyChinese = ifOnlyChinese(attribute);
 		result.add(onlyChinese + "");
+		
+		int containsDot = ifContainsDot(attribute);
+		result.add(containsDot + "");
 		
 		return result;
 	}
@@ -111,7 +114,7 @@ public class FeatureExtraction {
 	}
 	
 	public int getFirstTwoNum(String attribute){
-		if (Character.isDigit(attribute.charAt(0)) && Character.isDigit(attribute.charAt(1))) {
+		if (attribute.length() > 1 && Character.isDigit(attribute.charAt(0)) && Character.isDigit(attribute.charAt(1))) {
 			
 			return Integer.parseInt(attribute.substring(0, 2));
 		}
@@ -120,7 +123,7 @@ public class FeatureExtraction {
 	}
 	
 	public int getFirstThreeNum(String attribute){
-		if (Character.isDigit(attribute.charAt(0)) && Character.isDigit(attribute.charAt(1))
+		if (attribute.length() > 2 && Character.isDigit(attribute.charAt(0)) && Character.isDigit(attribute.charAt(1))
 				&& Character.isDigit(attribute.charAt(2))) {
 			
 			return Integer.parseInt(attribute.substring(0, 2));
@@ -151,8 +154,13 @@ public class FeatureExtraction {
 		return 0;
 	}
 	
+	/**
+	 * 0：不包含 1：包含日期
+	 * @param attribute
+	 * @return
+	 */
 	public int ifContainsDate(String attribute){
-		String regex = "((?<!\\d)((((1[6-9]|[2-9]\\d)\\d{2})"
+		String regex = "(((((1[6-9]|[2-9]\\d)\\d{2})"
 			+ "(-|\\s|/|\\.|\\u5e74))?(1[02]|0?[13578])(-|\\s|/|\\.|\\u6708)"
 			+ "([12]\\d|3[01]|0?[1-9])(-|\\s|/|\\.|\\u65e5)?)|"
 			+ "((((1[6-9]|[2-9]\\d)\\d{2})(-|\\s|/|.|\\u5e74)?)"
@@ -161,8 +169,10 @@ public class FeatureExtraction {
 			+ "\\d{2})-0?2-(1\\d|2[0-8]|0?[1-9]))|(((1[6-9]|[2-9]\\d)"
 			+ "(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))"
 			+ "-0?2-29-))";
-		
-		return CountByRegex(regex, attribute);
+		if (CountByRegex(regex, attribute) > 0) {
+			return 1;
+		}
+		return 0;
 	}
 	
 	/**
@@ -212,5 +222,18 @@ public class FeatureExtraction {
 		}
 		return 0;
 	}
-	
+	/**
+	 * 0:不包含 1：包含一个小数点 2：包含多个小数点
+	 * @param attribute
+	 * @return
+	 */
+	public int ifContainsDot(String attribute){
+		String regex = "\\.";
+		if (CountByRegex(regex, attribute) == 1) {
+			return 1;
+		}else if (CountByRegex(regex, attribute) > 1) {
+			return 2;
+		}
+		return 0;
+	}
 }
