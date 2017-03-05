@@ -7,6 +7,24 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 
 public class ResultOperation {
+	private static ArrayList<ArrayList<String>> resultMaybeWrong = new ArrayList<ArrayList<String>>();
+	private static ArrayList<ArrayList<String>> resultRight = new ArrayList<ArrayList<String>>();
+	private static ArrayList<String> fileReadingResultRight = new ArrayList<String>();
+	private static ArrayList<String> fileReadingResultMaybeWrong = new ArrayList<String>();
+	
+	public static ArrayList<ArrayList<String>> getWrongResult() {
+		return resultMaybeWrong;
+	}
+	public static ArrayList<ArrayList<String>> getRightResult() {
+		return resultRight;
+	}
+	public static ArrayList<String> getWrongFileReadingResult() {
+		return fileReadingResultMaybeWrong;
+	}
+	public static ArrayList<String> getRightFileReadingResult() {
+		return fileReadingResultRight;
+	}
+	
 	public void combineSameAttribute(){
 		
 	}
@@ -24,6 +42,10 @@ public class ResultOperation {
 			ArrayList<String> targetAttributeResult,
 			String fileName){
 		ArrayList<ArrayList<String>> result = new ArrayList<ArrayList<String>>();
+		resultMaybeWrong.clear();
+		fileReadingResultMaybeWrong.clear();
+		fileReadingResultRight.clear();
+		
 		//错误、缺失属性数量
 		int wrongCount = 0;
 		int missingCount = 0;
@@ -131,23 +153,29 @@ public class ResultOperation {
 			}
 			//构造最终字符串
 			String stringToWrite = turnRegexResultToString(outputResultArrayList, fileReadingResult.get(i));
+			
+			if (missingAttributeBoolean) {
+				missingCount++;
+			}
+			
+			//统计错误以及缺失属性的条目数量
+			if (maybeWrongBoolean) {
+				wrongCount++;
+				resultMaybeWrong.add(outputResultArrayList);
+				fileReadingResultMaybeWrong.add(fileReadingResult.get(i));
+//				System.out.println(fileReadingResult.get(i));
+//				System.out.println(outputResultArrayList);
+			}else{
+				resultRight.add(outputResultArrayList);
+				fileReadingResultRight.add(fileReadingResult.get(i));
+			}
+			
 			//如果有文件名则写入文件
 			if (fileName.length() != 0) {
 				writeToTxt(stringToWrite, fileName);
 			}else {
 				//System.out.println(stringToWrite);
 			}
-			//统计错误以及缺失属性的条目数量
-			if (maybeWrongBoolean) {
-				wrongCount++;
-//				System.out.println(fileReadingResult.get(i));
-//				System.out.println(outputResultArrayList);
-			}
-			if (missingAttributeBoolean) {
-				missingCount++;
-			}
-			
-			//System.out.println(stringToWrite);
 			result.add(outputResultArrayList);
 		}
 		System.out.println("total: " + fileReadingResult.size());

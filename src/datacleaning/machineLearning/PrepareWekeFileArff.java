@@ -6,10 +6,11 @@ import datacleaning.Util.Operations;
 
 public class PrepareWekeFileArff {
 	public static void writeArff(ArrayList<ArrayList<String>> finalResult, ArrayList<String> fileReadingResult
-			,String fileName){
+			, String fileName, ArrayList<String> targetAttributeResult){
 		FeatureExtraction featureExtraction = new FeatureExtraction();
 		
-		writeHeadtoArff(fileName);
+		String attributeSet = Operations.arraylistToString(targetAttributeResult, ",");
+		writeHeadtoArff(fileName, attributeSet);
 		
 		for (int i = 0; i < finalResult.size(); i++) {
 			ArrayList<String> oneLineInFinalResult = finalResult.get(i);
@@ -29,7 +30,7 @@ public class PrepareWekeFileArff {
 		}
 	}
 	
-	public static void writeHeadtoArff(String fileName){
+	public static void writeHeadtoArff(String fileName, String attributeSet){
 		Operations.writeOneLineToFile("@RELATION attributeRecognition", fileName);
 		Operations.writeOneLineToFile("@ATTRIBUTE length  NUMERIC", fileName);
 		Operations.writeOneLineToFile("@ATTRIBUTE numCount  NUMERIC", fileName);
@@ -46,6 +47,7 @@ public class PrepareWekeFileArff {
 		Operations.writeOneLineToFile("@ATTRIBUTE onlyEnglish  {0,1,2}", fileName);
 		Operations.writeOneLineToFile("@ATTRIBUTE onlyChinese  {0,1,2}", fileName);
 		Operations.writeOneLineToFile("@ATTRIBUTE containsDot  {0,1,2}", fileName);
+		Operations.writeOneLineToFile("@ATTRIBUTE attribute  {" + attributeSet + "}", fileName);
 		Operations.writeOneLineToFile("@data", fileName);
 	}
 	

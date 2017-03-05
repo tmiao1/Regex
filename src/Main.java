@@ -23,17 +23,19 @@ import datacleaning.machineLearning.PrepareWekeFileArff;
 
 public class Main {
 	/*******************清洗前的文件******************/
-	public static String fileName = "/Users/miao/哈工大/项目/数据清洗/toDoFileList/爱慕网--160万/amimer1.txt";
+	//public static String fileName = "/Users/miao/哈工大/项目/数据清洗/toDoFileList/爱慕网--160万/amimer1.txt";
 	//public static String fileName = "/Users/miao/哈工大/项目/数据清洗/toDoFileList/users2.txt";
 
-	//public static String fileName = "D:\\数据清洗文件\\toDoFileList\\爱慕网--160万\\amimer1.txt";
+	public static String fileName = "D:\\数据清洗文件\\toDoFileList\\爱慕网--160万\\amimer1.txt";
 	
 	/*******************清洗后的目标文件******************/
 	public static String targetFileName = "/Users/miao/哈工大/result.txt";
 	//public static String targetFileName = "D:\\result.txt";
 	
 	/*******************目标arff文件******************/
-	public static String arffFileName = "/Users/miao/哈工大/result.arff";
+	//public static String arffFileName = "/Users/miao/哈工大/result.arff";
+	public static String arffFileName = "D:\\result.arff";
+
 	/**
 	 * @param args
 	 */
@@ -76,6 +78,12 @@ public class Main {
 		
 		ArrayList<ArrayList<String>> finalResult = new ArrayList<ArrayList<String>>();
 		
+		ArrayList<ArrayList<String>> finalResultMaybeWrong = new ArrayList<ArrayList<String>>();
+		
+		ArrayList<ArrayList<String>> finalResultRight = new ArrayList<ArrayList<String>>();
+		
+		ArrayList<String> fileReadingResultRight = new ArrayList<String>();
+		
 		if (fileName.endsWith(".txt")) {
 			TxtReader txtReader = new TxtReader();
 			 fileReadingResult = txtReader.readTxtFile(fileName);
@@ -102,8 +110,11 @@ public class Main {
 		
 //		finalResult = ResultOperation.outputReusltToConsole(fileReadingResult, regexResult, targetAttributeResult, targetFileName);
 		finalResult = ResultOperation.outputReusltToConsole(fileReadingResult, regexResult, targetAttributeResult, "");
+		finalResultMaybeWrong = ResultOperation.getWrongResult();
+		finalResultRight = ResultOperation.getRightResult();
+		fileReadingResultRight = ResultOperation.getRightFileReadingResult();
 
-		PrepareWekeFileArff.writeArff(finalResult, fileReadingResult, arffFileName);
+		PrepareWekeFileArff.writeArff(finalResultRight, fileReadingResultRight, arffFileName, targetAttributeResult);
 		//printArrayListResult(regexResult.get(3), fileReadingResult.get(3));
 	}
 	
