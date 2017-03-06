@@ -19,29 +19,37 @@ import datacleaning.Regex.TelRegex;
 import datacleaning.Regex.UnknownRegex;
 import datacleaning.attributecount.AttributeCount;
 import datacleaning.attributecount.ResultOperation;
+import datacleaning.machineLearning.MachineLearning;
 import datacleaning.machineLearning.PrepareWekeFileArff;
 
 public class Main {
 	/*******************清洗前的文件******************/
-	public static String fileName = "/Users/miao/哈工大/项目/数据清洗/toDoFileList/爱慕网--160万/amimer1.txt";
+	//public static String fileName = "/Users/miao/哈工大/项目/数据清洗/toDoFileList/爱慕网--160万/amimer1.txt";
 	//public static String fileName = "/Users/miao/哈工大/项目/数据清洗/toDoFileList/users2.txt";
 
-	//public static String fileName = "D:\\数据清洗文件\\toDoFileList\\爱慕网--160万\\amimer1.txt";
+	public static String fileName = "D:\\数据清洗文件\\toDoFileList\\爱慕网--160万\\amimer1.txt";
 	
 	/*******************清洗后的目标文件******************/
-	public static String targetFileName = "/Users/miao/哈工大/result.txt";
-	//public static String targetFileName = "D:\\result.txt";
+	//public static String targetFileName = "/Users/miao/哈工大/result.txt";
+	public static String targetFileName = "D:\\result.txt";
 	
 	/*******************目标arff文件******************/
-	public static String arffFileName = "/Users/miao/哈工大/result.arff";
-	//public static String arffFileName = "D:\\result.arff";
+	//public static String arffFileName = "/Users/miao/哈工大/result.arff";
+	public static String arffFileName = "D:\\result.arff";
+	
+	public static String targetModelName = "D:\\J48.model";
 
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		dataCleaning();
+		try {
+			dataCleaning();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		/*****************测试正则表达式*****************/
 //		String string = "2011052596240-----孙懿----------15811555621-----建外大街22号赛特广场11层:117.00-----";
 //		ArrayList<String> oneLineResult = Regex(string);
@@ -58,7 +66,7 @@ public class Main {
 //		System.out.println(resultToCsvLine);
 	}
 	
-	public static void dataCleaning(){
+	public static void dataCleaning() throws Exception{
 		ArrayList<String> fileReadingResult = null;//存储读取文件的结果（按行存储）
 		/*
 		 * 在regexResult中存储正则匹配的结果，
@@ -109,12 +117,18 @@ public class Main {
 //		System.out.println(targetAttributeResult);
 		
 //		finalResult = ResultOperation.outputReusltToConsole(fileReadingResult, regexResult, targetAttributeResult, targetFileName);
-		finalResult = ResultOperation.outputReusltToConsole(fileReadingResult, regexResult, targetAttributeResult, "");
-		finalResultMaybeWrong = ResultOperation.getWrongResult();
-		finalResultRight = ResultOperation.getRightResult();
-		fileReadingResultRight = ResultOperation.getRightFileReadingResult();
-
-		PrepareWekeFileArff.writeArff(finalResultRight, fileReadingResultRight, arffFileName, targetAttributeResult);
+//		finalResult = ResultOperation.outputReusltToConsole(fileReadingResult, regexResult, targetAttributeResult, "");
+//		finalResultMaybeWrong = ResultOperation.getWrongResult();
+//		finalResultRight = ResultOperation.getRightResult();
+//		fileReadingResultRight = ResultOperation.getRightFileReadingResult();
+//
+//		PrepareWekeFileArff.writeArff(finalResultRight, fileReadingResultRight, arffFileName, targetAttributeResult);
+		
+		MachineLearning machineLearning = new MachineLearning();
+		//machineLearning.createModel(arffFileName, targetModelName);		
+		ArrayList<String> dataToPredict = new ArrayList<String>();
+		dataToPredict.add("于溪淼");
+		machineLearning.doPredict(dataToPredict, targetAttributeResult);
 		//printArrayListResult(regexResult.get(3), fileReadingResult.get(3));
 	}
 	
