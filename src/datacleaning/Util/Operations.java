@@ -40,4 +40,33 @@ public class Operations {
 			e.printStackTrace();
 		}
 	}
+	
+	public static void writeToCsv(ArrayList<ArrayList<String>> finalResult, ArrayList<String> fileReadingResult
+			, String fileName, ArrayList<String> targetAttributeResult){
+		String attributeSet = Operations.arraylistToString(targetAttributeResult, ",");
+		writeOneLineToFile(attributeSet, fileName);
+		for (int i = 0; i < finalResult.size(); i++) {
+			ArrayList<String> oneLineInFinalResult = finalResult.get(i);
+			String onelineInFile = fileReadingResult.get(i);
+			String stringToWriteString = "";
+			for (String string : oneLineInFinalResult) {
+				
+				int start = Integer.parseInt(string.split(";")[0]);
+				int end = Integer.parseInt(string.split(";")[1]);
+				String attributeString = string.split(";")[2];
+				if (start != -1) {
+					String valueString = onelineInFile.substring(start, end);
+					if (stringToWriteString.length() == 0) {
+						stringToWriteString = valueString;
+					}else {
+						stringToWriteString = stringToWriteString + "," + valueString;
+					}
+				}else{
+					stringToWriteString = stringToWriteString + ",";
+				}
+				
+			}
+			writeOneLineToFile(stringToWriteString, fileName);
+		}
+	}
 }

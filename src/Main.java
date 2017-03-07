@@ -17,6 +17,7 @@ import datacleaning.Regex.MoneyRegex;
 import datacleaning.Regex.NameRegex;
 import datacleaning.Regex.TelRegex;
 import datacleaning.Regex.UnknownRegex;
+import datacleaning.Util.Operations;
 import datacleaning.attributecount.AttributeCount;
 import datacleaning.attributecount.ResultOperation;
 import datacleaning.machineLearning.MachineLearning;
@@ -38,6 +39,10 @@ public class Main {
 	public static String arffFileName = "D:\\result.arff";
 	
 	public static String targetModelName = "D:\\J48.model";
+	
+	public static String csvFileName = "D:\\right.csv";
+	
+	public static String wrongCsvFileName = "D:\\wrong.csv";
 
 	/**
 	 * @param args
@@ -92,6 +97,8 @@ public class Main {
 		
 		ArrayList<String> fileReadingResultRight = new ArrayList<String>();
 		
+		ArrayList<String> fileReadingResultWrong = new ArrayList<String>();
+		
 		if (fileName.endsWith(".txt")) {
 			TxtReader txtReader = new TxtReader();
 			 fileReadingResult = txtReader.readTxtFile(fileName);
@@ -117,10 +124,14 @@ public class Main {
 //		System.out.println(targetAttributeResult);
 		
 //		finalResult = ResultOperation.outputReusltToConsole(fileReadingResult, regexResult, targetAttributeResult, targetFileName);
-//		finalResult = ResultOperation.outputReusltToConsole(fileReadingResult, regexResult, targetAttributeResult, "");
-//		finalResultMaybeWrong = ResultOperation.getWrongResult();
-//		finalResultRight = ResultOperation.getRightResult();
-//		fileReadingResultRight = ResultOperation.getRightFileReadingResult();
+		finalResult = ResultOperation.outputReusltToConsole(fileReadingResult, regexResult, targetAttributeResult, "");
+		finalResultMaybeWrong = ResultOperation.getWrongResult();
+		finalResultRight = ResultOperation.getRightResult();
+		fileReadingResultRight = ResultOperation.getRightFileReadingResult();
+		fileReadingResultWrong = ResultOperation.getWrongFileReadingResult();
+		
+		Operations.writeToCsv(finalResultRight, fileReadingResultRight, csvFileName, targetAttributeResult);
+		Operations.writeToCsv(finalResultMaybeWrong, fileReadingResultWrong, wrongCsvFileName, targetAttributeResult);
 //
 //		PrepareWekeFileArff.writeArff(finalResultRight, fileReadingResultRight, arffFileName, targetAttributeResult);
 		
