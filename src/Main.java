@@ -36,7 +36,9 @@ public class Main {
 	
 	/*******************目标arff文件******************/
 	//public static String arffFileName = "/Users/miao/哈工大/result.arff";
-	public static String arffFileName = "D:\\result.arff";
+	public static String arffFileNameRight = "D:\\rightResult.arff";
+	
+	public static String arffFileNameAll = "D:\\allResult.arff";
 	
 	public static String targetModelName = "D:\\J48.model";
 	
@@ -108,7 +110,6 @@ public class Main {
 			ArrayList<String> oneLineResult = Regex(string);
 			regexResult.add(oneLineResult);   //将每一行的结果添加到总结果中，总结果为二维数组
 		}
-		
 		//计算每一列存在的属性及数量
 		AttributeCount.countAttribute(regexResult, countResult);
 		//计算每个属性总共的数量
@@ -118,10 +119,10 @@ public class Main {
 		//合并按行统计的结果，以一定阈值筛选行属性的形式，最终将筛选出的行属性取并集得到属性集
 		targetAttributeResult = AttributeCount.analyseAttributeByLine(resultByLine, regexResult.size());
 		
-//		System.out.println(totalCountResultHashMap);
-//		System.out.println(countResult);
-//		System.out.println(resultByLine);
-//		System.out.println(targetAttributeResult);
+		System.out.println(totalCountResultHashMap);
+		System.out.println(countResult);
+		System.out.println(resultByLine);
+		System.out.println(targetAttributeResult);
 		
 //		finalResult = ResultOperation.outputReusltToConsole(fileReadingResult, regexResult, targetAttributeResult, targetFileName);
 		finalResult = ResultOperation.outputReusltToConsole(fileReadingResult, regexResult, targetAttributeResult, "");
@@ -130,16 +131,17 @@ public class Main {
 		fileReadingResultRight = ResultOperation.getRightFileReadingResult();
 		fileReadingResultWrong = ResultOperation.getWrongFileReadingResult();
 		
-		Operations.writeToCsv(finalResultRight, fileReadingResultRight, csvFileName, targetAttributeResult);
-		Operations.writeToCsv(finalResultMaybeWrong, fileReadingResultWrong, wrongCsvFileName, targetAttributeResult);
+//		Operations.writeToCsv(finalResultRight, fileReadingResultRight, csvFileName, targetAttributeResult);
+//		Operations.writeToCsv(finalResultMaybeWrong, fileReadingResultWrong, wrongCsvFileName, targetAttributeResult);
 //
-//		PrepareWekeFileArff.writeArff(finalResultRight, fileReadingResultRight, arffFileName, targetAttributeResult);
+		PrepareWekeFileArff.writeArff(finalResultRight, fileReadingResultRight, arffFileNameRight, targetAttributeResult);
+		PrepareWekeFileArff.writeArff(finalResult, fileReadingResult, arffFileNameAll, targetAttributeResult);
 		
-		MachineLearning machineLearning = new MachineLearning();
-		//machineLearning.createModel(arffFileName, targetModelName);		
-		ArrayList<String> dataToPredict = new ArrayList<String>();
-		dataToPredict.add("于溪淼");
-		machineLearning.doPredict(dataToPredict, targetAttributeResult);
+//		MachineLearning machineLearning = new MachineLearning();
+//		//machineLearning.createModel(arffFileName, targetModelName);		
+//		ArrayList<String> dataToPredict = new ArrayList<String>();
+//		dataToPredict.add("于溪淼");
+//		machineLearning.doPredict(dataToPredict, targetAttributeResult);
 		//printArrayListResult(regexResult.get(3), fileReadingResult.get(3));
 	}
 	
